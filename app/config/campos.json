@@ -1,0 +1,313 @@
+{
+  "moneda": "€",
+
+  "catalogos": [
+    {
+      "id": "maquinas",
+      "titulo": "Máquinas",
+      "elemento": "Máquina",
+      "descripcion": "Impresoras 3D, cortadoras láser… El consumo y la amortización se usan para el coste real de cada placa.",
+      "campos": [
+        { "id": "nombre",        "etiqueta": "Nombre",       "tipo": "texto", "obligatorio": true },
+        { "id": "tipo",          "etiqueta": "Tipo",         "tipo": "seleccion",
+          "opciones": ["Impresora 3D", "Impresora de resina", "Cortadora láser", "Grabadora láser", "CNC", "Otra"] },
+        { "id": "consumoW",      "etiqueta": "Consumo medio", "tipo": "numero", "unidad": "W" },
+        { "id": "precio",        "etiqueta": "Precio",        "tipo": "moneda" },
+        { "id": "vidaUtilHoras", "etiqueta": "Vida útil",     "tipo": "numero", "unidad": "h" },
+        { "id": "notas",         "etiqueta": "Notas",         "tipo": "texto" },
+        { "id": "predeterminada","etiqueta": "Por defecto",   "tipo": "booleano", "unico": true }
+      ],
+      "inicial": [
+        { "nombre": "Mi impresora 3D", "tipo": "Impresora 3D", "consumoW": 100, "vidaUtilHoras": 3000, "predeterminada": true }
+      ]
+    },
+    {
+      "id": "accesorios",
+      "titulo": "Accesorios",
+      "elemento": "Accesorio",
+      "campos": [
+        { "id": "nombre",      "etiqueta": "Nombre",             "tipo": "texto", "obligatorio": true },
+        { "id": "precioUnidad","etiqueta": "Precio por unidad",  "tipo": "moneda" },
+        { "id": "proveedor",   "etiqueta": "Proveedor",          "tipo": "texto" },
+        { "id": "enlace",      "etiqueta": "Enlace",             "tipo": "enlace" }
+      ],
+      "inicial": []
+    },
+    {
+      "id": "tiposGasto",
+      "titulo": "Tipos de gasto",
+      "elemento": "Tipo",
+      "campos": [
+        { "id": "nombre", "etiqueta": "Nombre", "tipo": "texto", "obligatorio": true },
+        { "id": "notas",  "etiqueta": "Notas",  "tipo": "texto" }
+      ],
+      "inicial": [
+        { "nombre": "Bobinas" },
+        { "nombre": "Recambios" },
+        { "nombre": "Material de limpieza" },
+        { "nombre": "Postprocesado" },
+        { "nombre": "Pintura" }
+      ]
+    },
+    {
+      "id": "tiposFilamento",
+      "titulo": "Tipos de filamento",
+      "elemento": "Tipo",
+      "campos": [
+        { "id": "nombre", "etiqueta": "Nombre", "tipo": "texto", "obligatorio": true },
+        { "id": "notas",  "etiqueta": "Notas",  "tipo": "texto" }
+      ],
+      "inicial": [
+        { "nombre": "PLA" },
+        { "nombre": "PETG" },
+        { "nombre": "ABS" },
+        { "nombre": "ASA" },
+        { "nombre": "TPU" },
+        { "nombre": "WOOD" },
+        { "nombre": "Resina" }
+      ]
+    }
+  ],
+
+  "registros": [
+    {
+      "id": "filamentos",
+      "titulo": "Filamentos",
+      "elemento": "Filamento",
+      "descripcion": "Bobinas que usas o tienes. Los tipos se gestionan en Catálogos.",
+      "agruparPor": "tipo",
+      "desglose": "contar",
+      "ordenarPor": ["tipo", "marca", "nombre"],
+      "resumen": [
+        { "id": "n",          "etiqueta": "Filamentos",          "tipo": "numero", "contar": true },
+        { "id": "precioMedio","etiqueta": "Precio medio por kg", "tipo": "moneda", "unidad": "/kg", "media": "precioKg" },
+        { "id": "minimo",     "etiqueta": "Más barato",          "tipo": "moneda", "unidad": "/kg", "minimo": "precioKg" },
+        { "id": "maximo",     "etiqueta": "Más caro",            "tipo": "moneda", "unidad": "/kg", "maximo": "precioKg" }
+      ],
+      "campos": [
+        { "id": "nombre",   "etiqueta": "Nombre",          "tipo": "texto", "obligatorio": true, "enListado": true,
+          "ayuda": "Ej.: PLA Basic, PLA Matte, PETG HF…" },
+        { "id": "marca",    "etiqueta": "Marca",           "tipo": "texto", "enListado": true },
+        { "id": "tipo",     "etiqueta": "Tipo",            "tipo": "catalogo", "catalogo": "tiposFilamento", "obligatorio": true, "enListado": true },
+        { "id": "color",    "etiqueta": "Color",           "tipo": "texto", "enListado": true, "muestra": "colorHex",
+          "ayuda": "Nombre del color, p. ej. Negro mate" },
+        { "id": "colorHex", "etiqueta": "Muestra de color","tipo": "color", "ayuda": "Opcional: se ve junto al nombre del color" },
+        { "id": "precioKg", "etiqueta": "Precio",          "tipo": "moneda", "unidad": "/kg", "obligatorio": true, "enListado": true },
+        { "id": "enlace",   "etiqueta": "Tienda",          "tipo": "enlace", "enListado": true },
+        { "id": "notas",    "etiqueta": "Notas",           "tipo": "textoLargo" }
+      ]
+    },
+    {
+      "id": "gastos",
+      "titulo": "Gastos",
+      "elemento": "Gasto",
+      "descripcion": "Compras de material de apoyo para las máquinas.",
+      "agruparPor": "tipo",
+      "campos": [
+        { "id": "fecha",       "etiqueta": "Fecha de compra", "tipo": "fecha", "porDefecto": "hoy", "enListado": true },
+        { "id": "nombre",      "etiqueta": "Nombre",          "tipo": "texto", "obligatorio": true, "enListado": true },
+        { "id": "tipo",        "etiqueta": "Tipo",            "tipo": "catalogo", "catalogo": "tiposGasto", "obligatorio": true, "enListado": true },
+        { "id": "precio",      "etiqueta": "Precio de compra","tipo": "moneda", "obligatorio": true, "total": true, "enListado": true },
+        { "id": "enlace",      "etiqueta": "Enlace o factura","tipo": "enlace", "enListado": true,
+          "ayuda": "URL de la tienda o ruta de la factura (D:\\…\\factura.pdf)" },
+        { "id": "descripcion", "etiqueta": "Descripción",     "tipo": "textoLargo" }
+      ]
+    },
+    {
+      "id": "ventas",
+      "titulo": "Ventas",
+      "elemento": "Venta",
+      "genero": "f",
+      "descripcion": "Piezas vendidas. Cada unidad vendida cuenta como una pieza impresa: coste = unidades × coste por unidad de la impresión.",
+      "agruparPor": "canal",
+      "resumen": [
+        { "id": "ventas",     "etiqueta": "Ventas",             "tipo": "numero", "contar": true },
+        { "id": "unidades",   "etiqueta": "Unidades vendidas",  "tipo": "numero", "suma": "cantidad" },
+        { "id": "ingresos",   "etiqueta": "Ingresos",           "tipo": "moneda", "suma": "importe" },
+        { "id": "coste",      "etiqueta": "Coste",              "tipo": "moneda", "suma": "coste" },
+        { "id": "beneficio",  "etiqueta": "Beneficio",          "tipo": "moneda", "suma": "beneficio", "signo": true },
+        { "id": "margen",     "etiqueta": "Margen",             "tipo": "porcentaje", "formula": "beneficio / ingresos * 100", "signo": true }
+      ],
+      "campos": [
+        { "id": "fecha",        "etiqueta": "Fecha",                       "tipo": "fecha", "porDefecto": "hoy", "enListado": true },
+        { "id": "impresion",    "etiqueta": "Impresión",                   "tipo": "impresion", "obligatorio": true, "enListado": true,
+          "rellena": { "costeUnidad": "costeVenta" } },
+        { "id": "cantidad",     "etiqueta": "Unidades vendidas",           "tipo": "numero", "porDefecto": 1, "obligatorio": true, "enListado": true },
+        { "id": "precioUnidad", "etiqueta": "Precio de venta por unidad",  "tipo": "moneda", "obligatorio": true, "enListado": true },
+        { "id": "costeUnidad",  "etiqueta": "Coste por unidad",            "tipo": "moneda", "enListado": true,
+          "ayuda": "Se calcula al elegir la impresión: material y accesorios más lo que marques abajo (si el coste real está activado). Puedes ajustarlo a mano" },
+        { "id": "incluirElectricidad", "etiqueta": "Incluir electricidad",  "tipo": "booleano", "porDefecto": true,  "ajuste": "costes", "recalcula": "impresion" },
+        { "id": "incluirAmortizacion", "etiqueta": "Incluir amortización",  "tipo": "booleano", "porDefecto": true,  "ajuste": "costes", "recalcula": "impresion" },
+        { "id": "incluirPostprocesado","etiqueta": "Incluir postprocesado", "tipo": "booleano", "porDefecto": true,  "ajuste": "costes", "recalcula": "impresion" },
+        { "id": "incluirFallos",       "etiqueta": "Incluir fallos",        "tipo": "booleano", "porDefecto": true,  "ajuste": "costes", "recalcula": "impresion" },
+        { "id": "incluirDiseno",       "etiqueta": "Incluir diseño",        "tipo": "booleano", "porDefecto": false, "ajuste": "costes", "recalcula": "impresion",
+          "ayuda": "El diseño se hace una vez: inclúyelo solo si esta venta debe pagarlo" },
+        { "id": "importe",      "etiqueta": "Importe",                     "tipo": "moneda", "formula": "cantidad * precioUnidad", "total": true, "enListado": true },
+        { "id": "coste",        "etiqueta": "Coste",                       "tipo": "moneda", "formula": "cantidad * costeUnidad" },
+        { "id": "beneficio",    "etiqueta": "Beneficio",                   "tipo": "moneda", "formula": "cantidad * (precioUnidad - costeUnidad)", "signo": true, "enListado": true },
+        { "id": "canal",        "etiqueta": "Canal",                       "tipo": "seleccion", "enListado": true,
+          "opciones": ["En mano", "Tienda", "Wallapop", "Vinted", "WhatsApp", "Etsy", "Feria", "Encargo", "Otro"] },
+        { "id": "cliente",      "etiqueta": "Cliente",                     "tipo": "texto" },
+        { "id": "notas",        "etiqueta": "Notas",                       "tipo": "texto" }
+      ]
+    }
+  ],
+
+  "totales": [
+    { "id": "coste",            "etiqueta": "Coste total",          "tipo": "moneda",   "grupo": "Producción", "enListado": true, "resumen": true },
+    { "id": "costeUnidad",      "etiqueta": "Coste por unidad",     "tipo": "moneda",   "grupo": "Producción", "enListado": true,
+      "formula": "coste / unidades", "requiere": ["coste"], "sumable": false },
+    { "id": "tiempoImpresion",  "etiqueta": "Tiempo de impresión",  "tipo": "duracion", "grupo": "Producción", "enListado": true, "resumen": true },
+    { "id": "tiempoPintura",    "etiqueta": "Tiempo de pintura",    "tipo": "duracion", "grupo": "Producción" },
+    { "id": "gramosModelo",     "etiqueta": "Filamento modelo",     "tipo": "numero", "unidad": "g", "grupo": "Filamento" },
+    { "id": "gramosDesperdicio","etiqueta": "Filamento desperdiciado", "tipo": "numero", "unidad": "g", "grupo": "Filamento" },
+    { "id": "gramosTotal",      "etiqueta": "Filamento total",      "tipo": "numero", "unidad": "g", "grupo": "Filamento", "resumen": true },
+    { "id": "porcentajeDesperdicio", "etiqueta": "% desperdicio",   "tipo": "porcentaje", "grupo": "Filamento",
+      "formula": "gramosDesperdicio / gramosTotal * 100", "requiere": ["gramosTotal"], "sumable": false },
+
+    { "id": "costeFilamento",     "etiqueta": "Coste de filamento",     "tipo": "moneda",   "grupo": "Producción" },
+    { "id": "tiempoDiseno",       "etiqueta": "Tiempo de diseño",       "tipo": "duracion", "grupo": "Producción" },
+    { "id": "tiempoPostprocesado","etiqueta": "Tiempo de montaje",      "tipo": "duracion", "grupo": "Producción" },
+
+    { "id": "costeElectricidad",  "etiqueta": "Electricidad",           "tipo": "moneda", "grupo": "Coste real", "ajuste": "costes",
+      "ayuda": "Suma de las placas: tiempo × consumo de su máquina × precio del kWh" },
+    { "id": "costeAmortizacion",  "etiqueta": "Amortización máquinas",  "tipo": "moneda", "grupo": "Coste real", "ajuste": "costes",
+      "ayuda": "Suma de las placas: tiempo × precio de su máquina ÷ vida útil" },
+    { "id": "costePostprocesado", "etiqueta": "Postprocesado",          "tipo": "moneda", "grupo": "Coste real", "ajuste": "costes",
+      "formula": "(tiempoPintura + tiempoPostprocesado) / 60 * postprocesadoHora", "requiereAlguno": ["tiempoPintura", "tiempoPostprocesado"],
+      "ayuda": "Pintura + montaje y acabados" },
+    { "id": "costeDiseno",        "etiqueta": "Diseño",                 "tipo": "moneda", "grupo": "Coste real", "ajuste": "costes",
+      "formula": "tiempoDiseno / 60 * disenoHora", "requiere": ["tiempoDiseno"] },
+    { "id": "fallosGeneral",      "etiqueta": "Fallos de impresión",    "tipo": "moneda", "grupo": "Coste real", "ajuste": "costes", "calculo": "fallos",
+      "ayuda": "% de impresión general sobre filamento, electricidad y amortización de toda la impresión" },
+    { "id": "fallosPlacas",       "etiqueta": "Fallos de placas",       "tipo": "moneda", "grupo": "Coste real", "ajuste": "costes", "calculo": "fallos",
+      "ayuda": "Suma de las placas marcadas: % sobre su filamento, electricidad y amortización" },
+    { "id": "fallosPostprocesado","etiqueta": "Fallos de postprocesado","tipo": "moneda", "grupo": "Coste real", "ajuste": "costes", "calculo": "fallos",
+      "ayuda": "% sobre el coste de postprocesado (pintura y montaje)" },
+    { "id": "fallosDiseno",       "etiqueta": "Fallos de diseño",       "tipo": "moneda", "grupo": "Coste real", "ajuste": "costes", "calculo": "fallos",
+      "ayuda": "% sobre el coste de diseño" },
+    { "id": "costeFallos",        "etiqueta": "Fallos",                 "tipo": "moneda", "grupo": "Coste real", "ajuste": "costes", "calculo": "fallos",
+      "oculto": true, "ayuda": "Total de fallos" },
+    { "id": "costeReal",          "etiqueta": "Coste real",             "tipo": "moneda", "grupo": "Coste real", "ajuste": "costes",
+      "enListado": true, "resumen": true,
+      "formula": "coste + costeElectricidad + costeAmortizacion + costePostprocesado + costeDiseno + costeFallos",
+      "requiereAlguno": ["costeElectricidad", "costeAmortizacion", "costePostprocesado", "costeDiseno", "costeFallos"],
+      "ayuda": "Material y accesorios + electricidad + amortización + postprocesado + diseño + fallos" },
+    { "id": "costeRealUnidad",    "etiqueta": "Coste real por unidad",  "tipo": "moneda", "grupo": "Coste real", "ajuste": "costes",
+      "enListado": true, "formula": "costeReal / unidades", "requiere": ["costeReal"], "sumable": false }
+  ],
+
+  "secciones": [
+    {
+      "id": "general",
+      "titulo": "Datos generales",
+      "repetible": false,
+      "campos": [
+        { "id": "nombre",   "etiqueta": "Nombre del objeto", "tipo": "texto", "obligatorio": true },
+        { "id": "fecha",    "etiqueta": "Fecha",             "tipo": "fecha", "porDefecto": "hoy", "enListado": true },
+        { "id": "estado",   "etiqueta": "Estado",            "tipo": "seleccion", "porDefecto": "Pendiente",
+          "opciones": ["Pendiente", "Imprimiendo", "Impreso", "Pintando", "Terminado", "Fallido"], "enListado": true },
+        { "id": "unidades", "etiqueta": "Unidades obtenidas", "tipo": "numero", "porDefecto": 1, "enListado": true,
+          "ayuda": "Piezas iguales que salen de esta impresión (para el coste por unidad)" },
+        { "id": "enlace",   "etiqueta": "Modelo (web o fichero)", "tipo": "enlace",
+          "ayuda": "Una URL o la ruta del fichero .3mf; desde la ficha podrás abrirlo" },
+        { "id": "notas",    "etiqueta": "Notas",             "tipo": "textoLargo" }
+      ]
+    },
+    {
+      "id": "placas",
+      "titulo": "Placas de impresión",
+      "repetible": true,
+      "elemento": "Placa",
+      "inicial": 1,
+      "campos": [
+        { "id": "nombre",            "etiqueta": "Descripción",            "tipo": "texto" },
+        { "id": "maquina",           "etiqueta": "Máquina",                "tipo": "catalogo", "catalogo": "maquinas" },
+        { "id": "tiempo",            "etiqueta": "Tiempo de impresión",    "tipo": "duracion", "total": "tiempoImpresion" },
+        { "id": "costeElectricidad", "etiqueta": "Electricidad",           "tipo": "moneda", "oculto": true, "ajuste": "costes",
+          "formula": "tiempo / 60 * consumoW / 1000 * precioKWh", "datosDe": { "catalogo": "maquinas", "campo": "maquina" },
+          "total": "costeElectricidad" },
+        { "id": "costeAmortizacion", "etiqueta": "Amortización",           "tipo": "moneda", "oculto": true, "ajuste": "costes",
+          "formula": "tiempo / 60 * precio / vidaUtilHoras", "datosDe": { "catalogo": "maquinas", "campo": "maquina" },
+          "total": "costeAmortizacion" },
+        { "id": "correcta",          "etiqueta": "Impresión correcta",     "tipo": "booleano", "porDefecto": true },
+        { "id": "fallo",             "etiqueta": "Fallo de placa",         "tipo": "booleano", "porDefectoAjuste": "fallos.placaMarcada", "ajuste": "costes",
+          "ayuda": "Placa delicada: aplica el % sobre su filamento, electricidad y amortización" },
+        { "id": "pFallo",            "etiqueta": "% fallo de placa",       "tipo": "numero", "unidad": "%", "placeholderAjuste": "fallos.placaPct", "ajuste": "costes" },
+        { "id": "gramos",            "etiqueta": "Filamento usado",        "tipo": "numero", "unidad": "g",
+          "sumaDe": { "lista": "filamentos", "campos": ["gramosModelo", "gramosDesperdicio"] } },
+        { "id": "coste",             "etiqueta": "Coste de material",      "tipo": "moneda",
+          "sumaDe": { "lista": "filamentos", "campos": ["coste"] } },
+        { "id": "filamentos",        "etiqueta": "Filamentos de la placa", "tipo": "lista", "elemento": "Añadir filamento", "inicial": 1,
+          "ayuda": "Gramos de cada filamento que usa la placa. El precio por kg se copia del filamento al elegirlo; desperdicio = soportes, purga, torre, borde…",
+          "campos": [
+            { "id": "filamento",         "etiqueta": "Filamento",     "tipo": "registro", "registro": "filamentos",
+              "mostrar": ["color", "tipo", "nombre"], "separador": " - ", "muestra": "colorHex",
+              "rellena": { "precioKg": "precioKg" } },
+            { "id": "gramosModelo",      "etiqueta": "Modelo (g)",    "tipo": "numero", "unidad": "g", "abrev": "modelo",
+              "total": ["gramosModelo", "gramosTotal"] },
+            { "id": "gramosDesperdicio", "etiqueta": "Desperdicio (g)", "tipo": "numero", "unidad": "g", "abrev": "desp.",
+              "total": ["gramosDesperdicio", "gramosTotal"] },
+            { "id": "precioKg",          "etiqueta": "Precio",        "tipo": "moneda", "unidad": "/kg", "subtotal": false },
+            { "id": "coste",             "etiqueta": "Coste",         "tipo": "moneda",
+              "formula": "(gramosModelo + gramosDesperdicio) * precioKg / 1000", "ceroSiFalta": ["gramosModelo", "gramosDesperdicio"],
+              "total": ["coste", "costeFilamento"] }
+          ] }
+      ]
+    },
+    {
+      "id": "accesorios",
+      "titulo": "Accesorios",
+      "repetible": true,
+      "elemento": "Accesorio",
+      "campos": [
+        { "id": "accesorio",   "etiqueta": "Accesorio",          "tipo": "catalogo", "catalogo": "accesorios",
+          "rellena": { "precioUnidad": "precioUnidad" } },
+        { "id": "cantidad",    "etiqueta": "Cantidad",           "tipo": "numero", "porDefecto": 1, "subtotal": false },
+        { "id": "precioUnidad","etiqueta": "Precio por unidad",  "tipo": "moneda", "subtotal": false,
+          "ayuda": "Se copia del catálogo al elegir el accesorio" },
+        { "id": "coste",       "etiqueta": "Coste",              "tipo": "moneda", "formula": "cantidad * precioUnidad", "total": "coste" }
+      ]
+    },
+    {
+      "id": "pintura",
+      "titulo": "Pintura y acabado",
+      "repetible": false,
+      "campos": [
+        { "id": "tiempo",    "etiqueta": "Tiempo de pintura",      "tipo": "duracion", "total": "tiempoPintura" },
+        { "id": "materiales","etiqueta": "Pinturas / materiales",  "tipo": "texto" },
+        { "id": "coste",     "etiqueta": "Coste de materiales",    "tipo": "moneda", "total": "coste" },
+        { "id": "notas",     "etiqueta": "Notas de acabado",       "tipo": "textoLargo" }
+      ]
+    },
+    {
+      "id": "manoObra",
+      "titulo": "Diseño y montaje",
+      "repetible": false,
+      "campos": [
+        { "id": "tiempoDiseno",  "etiqueta": "Tiempo de diseño",            "tipo": "duracion", "total": "tiempoDiseno",
+          "ayuda": "Modelado o adaptación del modelo. Déjalo vacío si es un modelo descargado sin cambios" },
+        { "id": "tiempoMontaje", "etiqueta": "Tiempo de montaje y acabados", "tipo": "duracion", "total": "tiempoPostprocesado",
+          "ayuda": "Montaje, lijado, pegado, limpieza de soportes… (la pintura va en su apartado)" }
+      ]
+    },
+    {
+      "id": "fallos",
+      "titulo": "Tasa de fallos",
+      "repetible": false,
+      "ajuste": "costes",
+      "descripcion": "Marca los fallos que quieres aplicar. Si dejas el % vacío se usa el de Configuración.",
+      "campos": [
+        { "id": "general",        "etiqueta": "Impresión general",   "tipo": "booleano", "porDefectoAjuste": "fallos.generalMarcada",
+          "ayuda": "Repetir toda la impresión: filamento, electricidad y amortización de todas las placas" },
+        { "id": "pGeneral",       "etiqueta": "% impresión general", "tipo": "numero", "unidad": "%", "placeholderAjuste": "fallos.generalPct" },
+        { "id": "postprocesado",  "etiqueta": "Postprocesado",       "tipo": "booleano", "porDefectoAjuste": "fallos.postprocesadoMarcada",
+          "ayuda": "Piezas que se rompen o estropean al pintar o montar" },
+        { "id": "pPostprocesado", "etiqueta": "% postprocesado",     "tipo": "numero", "unidad": "%", "placeholderAjuste": "fallos.postprocesadoPct" },
+        { "id": "diseno",         "etiqueta": "Diseño",              "tipo": "booleano", "porDefectoAjuste": "fallos.disenoMarcada",
+          "ayuda": "Iteraciones de diseño que hay que rehacer" },
+        { "id": "pDiseno",        "etiqueta": "% diseño",            "tipo": "numero", "unidad": "%", "placeholderAjuste": "fallos.disenoPct" }
+      ]
+    }
+  ]
+}

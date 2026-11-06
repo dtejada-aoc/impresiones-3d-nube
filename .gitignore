@@ -1,0 +1,14 @@
+# Copias de datos (pueden incluir datos personales)
+*.zip
+
+# Temporales
+*.tmp
+__pycache__/
+*.pyc
+
+# Sistema / editores
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/

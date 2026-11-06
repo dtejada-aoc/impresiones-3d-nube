@@ -1,0 +1,67 @@
+/* Versión móvil: ajustes para pantallas táctiles y pequeñas (se carga después de styles.css) */
+
+/* Respetar la muesca y la barra de gestos cuando se abre como aplicación instalada */
+.movil .topbar { padding-top: max(10px, env(safe-area-inset-top)); padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right)); }
+.movil .container { padding-bottom: max(64px, calc(24px + env(safe-area-inset-bottom))); }
+.movil .toast { bottom: max(20px, calc(12px + env(safe-area-inset-bottom))); max-width: calc(100vw - 32px); }
+
+/* En el móvil no se pueden abrir archivos ni carpetas del ordenador */
+.movil [data-abrir], .movil #backup-open { display: none !important; }
+
+.nueva-movil { display: none; }
+
+/* Pantallas táctiles: controles más fáciles de pulsar y sin zoom automático al escribir (iOS) */
+@media (pointer: coarse) {
+  .movil input, .movil select, .movil textarea { font-size: 16px; }
+  .movil .btn { min-height: 40px; }
+  .movil .btn-sm { min-height: 34px; }
+  .movil .check input[type=checkbox] { width: 20px; height: 20px; }
+}
+
+/* Teléfonos y tabletas en vertical */
+@media (max-width: 760px) {
+  .movil .topbar { display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; padding-bottom: 0; }
+  .movil .topbar .brand { font-size: 1rem; }
+  .movil .brand-mark { width: 30px; height: 30px; }
+  .movil .nueva-movil { display: inline-flex; padding: 6px 12px; min-height: 36px; }
+  .movil .nueva-escritorio { display: none; }
+  /* Menú en una sola fila que se desliza con el dedo */
+  .movil .topbar nav { grid-column: 1 / -1; flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; gap: 2px; margin: 0 -16px; padding: 0 12px 8px;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .movil .topbar nav::-webkit-scrollbar { display: none; }
+  .movil .navlink { flex: 0 0 auto; padding: 7px 10px; font-size: .92rem; }
+
+  .movil .container { padding-top: 16px; padding-left: 12px; padding-right: 12px; }
+  .movil .page-head { margin-bottom: 14px; }
+  .movil .card-pad { padding: 14px; }
+  .movil .stats { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .movil .stat { padding: 10px 12px; }
+  .movil .stat .value { font-size: 1.15rem; }
+  .movil th, .movil td { padding: 8px 8px; }
+  .movil .form-actions { z-index: 5; flex-wrap: wrap; padding-bottom: max(14px, env(safe-area-inset-bottom)); }
+  .movil .report-grid { grid-template-columns: 1fr; }
+  .movil .report-actions { flex-wrap: wrap; align-items: center; }
+  .movil .report-actions .check { white-space: nowrap; }
+  .movil .modal { padding: 8px; }
+}
+
+/* Datos y copias (Configuración) */
+.movil-info { display: grid; gap: 4px; margin: 4px 0 12px; }
+.movil-acciones { flex-wrap: wrap; justify-content: flex-start; }
+.movil-acciones label.btn { cursor: pointer; }
+.movil-ayuda { margin-top: 12px; }
+.movil-ayuda ul { margin: 8px 0 0; padding-left: 20px; display: grid; gap: 6px; }
+
+@media print {
+  .nueva-movil { display: none !important; }
+}
+
+/* Versión en la nube: pantalla de inicio de sesión */
+.sin-sesion .topbar nav, .sin-sesion .nueva-movil { display: none !important; }
+.login { max-width: 380px; margin: 8vh auto 0; display: grid; gap: 14px; }
+.login-marca { display: flex; align-items: center; gap: 12px; }
+.login-marca img { border-radius: 12px; }
+.login .btn-primary { width: 100%; min-height: 42px; }
+.login p { margin: 0; }
+label.btn.disabled { opacity: .6; pointer-events: none; }
